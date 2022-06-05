@@ -5,23 +5,26 @@ const main = document.getElementById("main");
 
 button.addEventListener("click", getInfo);
 
+button.addEventListener("click", () => {
+  container.innerHTML = "";
+});
+
 async function getInfo(e) {
   e.preventDefault();
-  const req = await fetch(
+
+  let req = await fetch(
     "https://imdb-api.com/en/API/Search/k_9wqf6qog/" + input.value
   );
+  input.value = "";
 
   const data = await req.json();
   displayResults(data);
-
-  console.log(data.results);
 }
 
 function displayResults(data) {
-  for (let i = 0; i < data.length; i++) {
-    const res = data.results[i];
-    console.log(res);
-
+  const res = data.results;
+  console.log(res);
+  for (let i = 0; i < res.length; i++) {
     let div = document.createElement("div");
     div.className =
       "mx-auto flex w-60 flex-col bg-white rounded-2xl shadow-xl shadow-slate-300/60";
@@ -44,11 +47,8 @@ function displayResults(data) {
     div2.appendChild(small);
     div2.appendChild(title);
     div2.appendChild(desc);
-    img.src = res.image;
-    title.innerHTML = res.title;
-    small.innerHTML = res.description;
-    console.log(div);
-    console.log(div2);
-    console.log(small);
+    img.src = res[i].image;
+    title.innerHTML = res[i].title;
+    small.innerHTML = res[i].description;
   }
 }
